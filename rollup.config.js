@@ -2,6 +2,7 @@ import resolve from 'rollup-plugin-node-resolve';
 import builtins from 'rollup-plugin-node-builtins';
 import globals from 'rollup-plugin-node-globals';
 import commonjs from 'rollup-plugin-commonjs';
+import * as deepmerge from 'deepmerge'
 import copy from 'rollup-plugin-copy';
 
 /**
@@ -19,27 +20,32 @@ import copy from 'rollup-plugin-copy';
  * several in pdfjs-dist/lib/shared/compatibility.js
  */
 
+const commonConfig = {
+  plugins: [
+    resolve({
+      browser: true,
+      preferBuiltins: false,
+    }),
+    commonjs({
+      namedExports: {
+        'node_modules/buffer/index.js': ['isBuffer'],
+        'node_modules/process/browser.js': ['nextTick'],
+        'node_modules/events/events.js': ['EventEmitter']
+      }
+    }),
+    globals(),
+    builtins(),
+  ]
+}
+
 export default [
-  {
+  deepmerge.all([{}, commonConfig, {
     input: './node_modules/pdfjs-dist/lib/pdf.js',
     output: {
       file: './pdf.js',
       format: 'es'
     },
     plugins: [
-      resolve({
-        browser: true,
-        preferBuiltins: false,
-      }),
-      commonjs({
-        namedExports: {
-          'node_modules/buffer/index.js': ['isBuffer'],
-          'node_modules/process/browser.js': ['nextTick'],
-          'node_modules/events/events.js': ['EventEmitter']
-        }
-      }),
-      globals(),
-      builtins(),
       copy({
         './node_modules/pdfjs-dist/build/pdf.worker.js': './pdf.worker.js',
         './node_modules/pdfjs-dist/build/pdf.worker.min.js': './pdf.worker.min.js',
@@ -48,6 +54,21 @@ export default [
         './node_modules/pdfjs-dist/LICENSE': './LICENSE'
       })
     ]
-  }
+  }]),
+  Object.assign({}, commonConfig, {
+    input: './node_modules/pdfjs-dist/lib/web/pdf_viewer.js',
+    output: {
+      file: './pdf_viewer.js',
+      format: 'es'
+    },
+  }),
+  // The original file uses ES6 modules - would be nice to get that directly
+  Object.assign({}, commonConfig, {
+    input: './node_modules/pdfjs-dist/lib/web/pdf_link_service.js',
+    output: {
+      file: './pdf_link_service.js',
+      format: 'es'
+    },
+  })
 ];
 

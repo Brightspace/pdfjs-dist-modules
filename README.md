@@ -1,18 +1,18 @@
-# pdfjs-dist
+# pdfjs-dist-modules
 
 This is a mirror of [pdfjs-dist](https://www.npmjs.com/package/pdfjs-dist), bundled and exposed as an ES module
 
 ## Install
 
 ```bash
-npm install @bundled-es-modules/pdfjs-dist
+npm install Brightspace/pdfjs-dist-modules
 ```
 
 ## Use
 
 ```html
 <script type="module">
-  import { pdfjs } from '@bundled-es-modules/pdfjs-dist/index.js';
+  import { pdfjs } from 'pdfjs-dist-modules/index.js';
   pdfjs.GlobalWorkerOptions.workerSrc = '@bundled-es-modules/pdfjs-dist/pdf.worker.js';
   var url = 'basicapi.pdf';
   var loadingTask = pdfjs.getDocument(url);
