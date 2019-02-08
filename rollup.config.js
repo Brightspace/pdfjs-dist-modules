@@ -43,7 +43,7 @@ export default [
     input: './node_modules/pdfjs-dist/lib/pdf.js',
     output: {
       file: './pdf.js',
-      format: 'es'
+      format: 'esm'
     },
     plugins: [
       copy({
@@ -59,7 +59,7 @@ export default [
     input: './node_modules/pdfjs-dist/lib/web/pdf_viewer.js',
     output: {
       file: './pdf_viewer.js',
-      format: 'es'
+      format: 'esm'
     },
   }),
   // The original file uses ES6 modules - would be nice to get that directly
@@ -67,7 +67,7 @@ export default [
     input: './node_modules/pdfjs-dist/lib/web/pdf_link_service.js',
     output: {
       file: './pdf_link_service.js',
-      format: 'es'
+      format: 'esm'
     },
   })
 ];
